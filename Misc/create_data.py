@@ -61,11 +61,13 @@ def create_data_csv():
 def write_row(order_number, product, order_date, address):
   product_price = products[product][0]
   quantity = numpy.random.geometric(p=1.0-(1.0/product_price), size=1)[0]
-  output = [order_number, product, quantity, product_price, order_date, address]
-  return output
+  return [order_number, product, quantity, product_price, order_date, address]
 
 if __name__ == '__main__':
   order_number = 141234
+  product_list = list(products)
+  weights = [products[product][1] for product in products]
+
   for month in range(1,13):
     if month <= 10:
       orders_amount = int(numpy.random.normal(loc=12000, scale=4000))
@@ -73,9 +75,6 @@ if __name__ == '__main__':
       orders_amount = int(numpy.random.normal(loc=20000, scale=3000))
     else: # month == 12
       orders_amount = int(numpy.random.normal(loc=26000, scale=3000))
-
-    product_list = [product for product in products]
-    weights = [products[product][1] for product in products]
 
     df = pd.DataFrame(columns=columns)
     print(orders_amount)
@@ -103,7 +102,7 @@ if __name__ == '__main__':
           df.loc[i] = write_row(order_number, "Wired Headphones", order_date, address)
           i += 1 
 
-      elif product_choice == "Google Phone" or product_choice == "Vareebadd Phone":
+      elif product_choice in ["Google Phone", "Vareebadd Phone"]:
         if random.random() < 0.18:
           df.loc[i] = write_row(order_number, "USB-C Charging Cable", order_date, address)
           i += 1
